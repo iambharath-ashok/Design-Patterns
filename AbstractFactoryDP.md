@@ -1,0 +1,116 @@
+# Abstract Factory
+
+-	Abstract Factory is a Factory of factories
+-	Hides the factory of itself
+-	JAXP uses uses Abstract Factory Design Pattern
+-	Using JAXP API we can read write and parse the elements of XML
+-	Document class is represents the XML instance in memory
+-	Document instance is created using DocumentBuilder
+-	DocumentBuilder is factory class of DocumentBuilder
+-	DocumentBuilderFactory is Abstract Factory that create the DocumentBuilder
+
+-	Example Dao Factory with multiple DB types like XML and DB
+
+	Code Snippet of Abstract Design Pattern
+	
+		package abstractfactory;
+	
+		public interface Dao {
+			void save();
+		}
+		
+		public abstract class AbstractXmlDao implements Dao {}
+
+		class EmpXmlDao extends AbstractXmlDao {
+			public void save() {
+				System.out.println("Saving emp to xml");
+			}
+		}
+
+		class DeptXmlDao extends AbstractXmlDao {
+			public void save() {
+				System.out.println("Saving dept to xml");
+			}
+		}
+
+
+		public abstract class AbstractDBDao implements Dao {}
+
+		class EmpDBDao extends AbstractDBDao {
+			
+			public void save() {
+				System.out.println("Saving Emp to DB");
+			}
+		}
+
+		class DeptDBDao extends AbstractDBDao {
+			
+			public void save() {
+				System.out.println("Saving Dept to DB");
+			}
+		}
+
+		public abstract class DaoAbstractFactory {
+			public abstract Dao getDao(String type);
+		}
+
+		class XmlDaoFactory extends DaoAbstractFactory {
+			public Dao getDao(String type) {
+				Dao dao = null;
+				if (type.equals("emp")) {
+					dao = new EmpXmlDao();
+				} else if (type.equals("dept")) {
+					dao = new DeptXmlDao();
+				}
+				return dao;
+			}
+		}
+
+		class DBDaoFactory extends DaoAbstractFactory {
+
+			public Dao getDao(String type) {
+				Dao dao = null;
+				if (type.equals("emp")) {
+					dao = new EmpDBDao();
+				} else if (type.equals("dept")) {
+					dao = new DeptDBDao();
+				}
+				return dao;
+			}
+		}
+
+		
+		public class DaoFactoryProducer {
+
+			public static DaoAbstractFactory getDaoFactory(String type) {
+				DaoAbstractFactory factory = null;
+				if (type.equals("xml")) {
+					factory = new XmlDaoFactory();
+				} else if (type.equals("db")) {
+					factory = new DBDaoFactory();
+				}
+				return factory;
+			}
+		}
+		
+		
+		public class TestAbstracDaoFactroy {
+
+			public static void main(String[] args) {
+				DaoAbstractFactory factory = DaoFactoryProducer.getDaoFactory("xml");
+				Dao dao = factory.getDao("emp");
+				dao.save();
+				dao = factory.getDao("dept");
+				dao.save();
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
